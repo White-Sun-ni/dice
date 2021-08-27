@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <style>
+        input {
+            border-style: none;
+            border-bottom-style: solid;
+            border-width: thin;
+            }
+
+        div {
+            border: solid thin black;
+            margin: 0.5em;
+            padding: 0.5em;
+            border-radius: 1em;
+            }
+
+        .dice {
+            border: solid thin black;
+            margin: 1px;
+            padding: 1px;
+            border-radius: 5px;
+            display: inline-block;
+            }
+
+        .outer {
+            margin: auto;
+            max-width: 750px;
+            }
+
+        @viewport {
+            width: 640;
+            }
+    </style>
+
+    <script>
+        var dieFace = {
+            4:'<svg><polygon points="0,3 25,46 50,3" style="stroke: black; fill: none" /></svg>',
+            6:'<svg><polygon points="3,3 3,47 47,47 47,3" style="stroke: black; fill: none" /></svg>',
+            8:'<svg><polygon points="17,0 60,25 17,50 17,0 0,25 17,50" style="stroke: black; fill: none" /></svg>',
+            10:'<svg><polygon points="43,50 0,25 43,0 50,25" style="stroke: black; fill: none" /></svg>',
+            12:'<svg><polygon points="25,0 1,17 10,45 40,45 49,17" style="stroke: black; fill: none" /></svg>',
+            20:'<svg><polygon points="0,46 25,0 50,46" style="stroke: black; fill: none" /></svg>',
+            };
+
+        function rollem() {
+            total = 0;
+            n = document.getElementById('quantity').value;
+            d = document.getElementById('dice').value;
+  	        o = document.getElementById('output');
+	        p = o.innerHTML;
+
+            if (d in dieFace) {
+                face = dieFace[d];
+            }
+            else {
+                face = dieFace['other'];
+            }
+
+        if (p != ''){
+            p = p.concat("<hr>")
+        } else {
+            p = p.concat('<button id="clear" onclick="clearme()" style="float:right;">Clear</button>');
+        }
+        for (i = 0; i < n; i++){
+		    r = Math.ceil(Math.random() * d);
+		    total += r;
+            p = p.concat('d', r.toString());
+            }
+            p += " Total: " + total;
+            o.innerHTML = p;
+        }
+
+        function clearme(){
+  	        o = document.getElementById('output');
+  	        o.innerHTML = "";
+        }
+
+        function dieClick(whatzis){
+            n = document.getElementById('quantity');
+            d = document.getElementById('dice');
+            if (whatzis.id == d.value) {
+                n.value = Number(n.value) + 1;
+            }
+            else {
+                n.value = 1;
+			    d.value = whatzis.id
+		    }
+        }
+    </script>
+    <title>1 d n dice</title>
+</head>
+<body onload=loady()>
+    <div class='outer'>
+        <div id="control">
+            <input type="number" step="1" id="quantity" value='3' maxlength="3" size="5"> d <input type="number" step="1" id="dice" value='6'maxlength="3" size="5">
+            <button id="roll" onclick="rollem()">Roll</button>
+        </div>
+        <div id="output"></div>
+    </div>
+</body>
+</html>
